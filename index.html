@@ -12,14 +12,11 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Custom styles for better appearance */
         .table-cell {
             padding: 8px 16px;
-            /* Reduzido o padding vertical */
             vertical-align: middle;
         }
 
-        /* Estiliza o input de valor para parecer texto normal */
         .valor-input {
             background-color: transparent;
             border: 1px solid transparent;
@@ -30,12 +27,30 @@
 
         .valor-input:focus {
             background-color: #f9fafb;
-            /* Um fundo leve ao focar */
             border-color: #d1d5db;
-            /* Borda sutil ao focar */
         }
 
-        /* Estilo para o modo escuro */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Dark mode styles */
         @media (prefers-color-scheme: dark) {
             body {
                 background-color: #111827;
@@ -81,11 +96,16 @@
 
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-6 lg:p-8">
 
-    <div class="max-w-4xl mx-auto">
+    <div id="loadingState" class="text-center">
+        <div class="loader"></div>
+        <p>Conectando ao banco de dados...</p>
+    </div>
+
+    <div id="appContent" class="max-w-4xl mx-auto hidden">
         <!-- Cabeçalho -->
         <div class="text-center mb-6">
             <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Controle de Gastos Mensais</h1>
-            <p class="mt-2 text-gray-600 dark:text-gray-400">Adicione suas despesas e navegue entre os meses.</p>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">Seus dados salvos e sincronizados na nuvem!</p>
         </div>
 
         <!-- Navegação de Mês -->
@@ -114,28 +134,25 @@
             </button>
         </div>
 
-
         <!-- Card Principal -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card border dark:border-gray-700">
             <div class="p-6">
-                <!-- Formulário para adicionar nova despesa -->
+                <!-- Formulário -->
                 <div
                     class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
                     <div class="md:col-span-2">
-                        <label for="descricao"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Descrição</label>
+                        <label for="descricao" class="block text-sm font-medium">Descrição</label>
                         <input type="text" id="descricao" placeholder="Ex: Conta de Energia"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 px-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                            class="mt-1 block w-full rounded-md h-10 px-3">
                     </div>
                     <div>
-                        <label for="valor" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor
-                            (R$)</label>
+                        <label for="valor" class="block text-sm font-medium">Valor (R$)</label>
                         <input type="number" id="valor" placeholder="150,00"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 px-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                            class="mt-1 block w-full rounded-md h-10 px-3">
                     </div>
                     <div class="flex items-end">
                         <button id="addGasto"
-                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md h-10 transition-colors duration-200">Adicionar</button>
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md h-10">Adicionar</button>
                     </div>
                 </div>
 
@@ -144,24 +161,13 @@
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <th
-                                    class="table-cell text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Descrição</th>
-                                <th
-                                    class="table-cell text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Valor (R$)</th>
-                                <th
-                                    class="table-cell text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Status</th>
-                                <th
-                                    class="table-cell text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Ações</th>
+                                <th class="table-cell text-left text-xs uppercase">Descrição</th>
+                                <th class="table-cell text-left text-xs uppercase">Valor (R$)</th>
+                                <th class="table-cell text-left text-xs uppercase">Status</th>
+                                <th class="table-cell text-center text-xs uppercase">Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelaGastos"
-                            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                            <!-- Linhas de gastos serão inseridas aqui via JavaScript -->
-                        </tbody>
+                        <tbody id="tabelaGastos" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
                     </table>
                 </div>
                 <p id="tabelaVazia" class="text-center text-gray-500 dark:text-gray-400 py-8">Nenhum gasto adicionado
@@ -187,8 +193,28 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // Importações do Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-CCBbgUoYZP4JeuKtaJPpvuKRBzy_khw",
+            authDomain: "meucontrolenrn.firebaseapp.com",
+            projectId: "meucontrolenrn",
+            storageBucket: "meucontrolenrn.firebasestorage.app",
+            messagingSenderId: "959447387085",
+            appId: "1:959447387085:web:4d8ea1f2efe4c67b511284"
+        };
+
+        // --------------------------------------------------------------------
+
         // --- ELEMENTOS DO DOM ---
+        const appContent = document.getElementById('appContent');
+        const loadingState = document.getElementById('loadingState');
         const descricaoInput = document.getElementById('descricao');
         const valorInput = document.getElementById('valor');
         const addGastoBtn = document.getElementById('addGasto');
@@ -203,39 +229,31 @@
         const copyMonthBtn = document.getElementById('copyMonthBtn');
 
         // --- ESTADO DA APLICAÇÃO ---
-        let allData = {}; // Objeto para armazenar gastos de todos os meses
-        let currentDate = new Date(); // Data para controlar o mês atual
-
-        // --- FUNÇÕES DE DADOS (localStorage) ---
-        const saveData = () => localStorage.setItem('controleDeGastos', JSON.stringify(allData));
-        const loadData = () => {
-            const data = localStorage.getItem('controleDeGastos');
-            if (data) {
-                allData = JSON.parse(data);
-            } else {
-                const key = getMonthKey(new Date());
-                allData[key] = [
-                    { descricao: 'Condomínio', valor: 550.00, status: 'pendente' },
-                    { descricao: 'Internet', valor: 130.00, status: 'pago' },
-                    { descricao: 'Energia', valor: 215.50, status: 'pendente' }
-                ];
-            }
-        };
+        let allData = {};
+        let currentDate = new Date();
+        let userId = null;
+        let db, auth;
 
         // --- FUNÇÕES AUXILIARES ---
         const getMonthKey = (date) => `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-        const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const formatarMoeda = (valor) => (valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         const formatarDisplayMes = (date) => {
             const formatted = date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
             return formatted.charAt(0).toUpperCase() + formatted.slice(1);
         };
 
-        // --- FUNÇÕES DE RENDERIZAÇÃO E LÓGICA ---
+        // --- LÓGICA DO FIREBASE ---
+        async function updateFirestore() {
+            if (!userId) return;
+            const userDocRef = doc(db, "users", userId);
+            await setDoc(userDocRef, allData);
+        }
+
+        // --- FUNÇÕES DE RENDERIZAÇÃO ---
         const atualizarTotais = (gastos) => {
             const totalPendente = gastos.filter(g => g.status === 'pendente').reduce((acc, g) => acc + g.valor, 0);
             const totalPago = gastos.filter(g => g.status === 'pago').reduce((acc, g) => acc + g.valor, 0);
             const totalGeral = gastos.reduce((acc, g) => acc + g.valor, 0);
-
             totalPendenteEl.textContent = formatarMoeda(totalPendente);
             totalPagoEl.textContent = formatarMoeda(totalPago);
             totalGeralEl.textContent = formatarMoeda(totalGeral);
@@ -244,31 +262,14 @@
         const renderizarTabela = (gastos) => {
             tabelaGastos.innerHTML = '';
             tabelaVaziaMsg.style.display = gastos.length === 0 ? 'block' : 'none';
-
             gastos.forEach((gasto, index) => {
                 const tr = document.createElement('tr');
                 tr.className = index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-700/50';
                 tr.innerHTML = `
-                    <td class="table-cell text-sm font-medium text-gray-900 dark:text-white">${gasto.descricao}</td>
-                    <td class="table-cell">
-                        <div class="relative rounded-md shadow-sm">
-                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <span class="text-gray-500 dark:text-gray-400 sm:text-sm">R$</span>
-                            </div>
-                            <input type="number" class="valor-input block w-full rounded-md py-2 pl-10 pr-2 text-gray-900 dark:text-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm" value="${gasto.valor.toFixed(2)}" data-index="${index}" step="0.01">
-                        </div>
-                    </td>
-                    <td class="table-cell">
-                        <select class="status-select w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600" data-index="${index}">
-                            <option value="pendente" ${gasto.status === 'pendente' ? 'selected' : ''}>Pendente</option>
-                            <option value="pago" ${gasto.status === 'pago' ? 'selected' : ''}>Pago</option>
-                        </select>
-                    </td>
-                    <td class="table-cell text-center">
-                        <button class="delete-btn text-red-500 hover:text-red-700 dark:hover:text-red-400" data-index="${index}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-                        </button>
-                    </td>
+                    <td class="table-cell text-sm font-medium">${gasto.descricao}</td>
+                    <td class="table-cell"><input type="number" class="valor-input" value="${gasto.valor.toFixed(2)}" data-index="${index}" step="0.01"></td>
+                    <td class="table-cell"><select class="status-select w-full h-10 rounded-md" data-index="${index}"><option value="pendente" ${gasto.status === 'pendente' ? 'selected' : ''}>Pendente</option><option value="pago" ${gasto.status === 'pago' ? 'selected' : ''}>Pago</option></select></td>
+                    <td class="table-cell text-center"><button class="delete-btn text-red-500 hover:text-red-700" data-index="${index}"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" /></svg></button></td>
                 `;
                 tabelaGastos.appendChild(tr);
             });
@@ -282,88 +283,106 @@
             renderizarTabela(allData[monthKey]);
         };
 
-        const adicionarGasto = () => {
-            const descricao = descricaoInput.value.trim();
-            const valor = parseFloat(valorInput.value);
-            if (descricao === '' || isNaN(valor) || valor <= 0) {
-                alert('Por favor, preencha a descrição e um valor válido.');
-                return;
-            }
-            const monthKey = getMonthKey(currentDate);
-            allData[monthKey].push({ descricao, valor, status: 'pendente' });
-            descricaoInput.value = '';
-            valorInput.value = '';
-            descricaoInput.focus();
-            saveData();
-            displayMonthData();
-        };
-
         // --- HANDLERS DE EVENTOS ---
         function handleTableActions(event) {
             const target = event.target;
             const monthKey = getMonthKey(currentDate);
             const index = target.dataset.index;
+            if (!allData[monthKey] || !allData[monthKey][index]) return;
 
             if (target.classList.contains('status-select')) {
                 allData[monthKey][index].status = target.value;
-                atualizarTotais(allData[monthKey]);
             } else if (target.classList.contains('valor-input')) {
                 const novoValor = parseFloat(target.value);
-                if (!isNaN(novoValor) && novoValor >= 0) {
-                    allData[monthKey][index].valor = novoValor;
-                    atualizarTotais(allData[monthKey]);
-                } else {
-                    target.value = allData[monthKey][index].valor.toFixed(2); // Reverte se inválido
-                }
+                if (!isNaN(novoValor) && novoValor >= 0) allData[monthKey][index].valor = novoValor;
             } else if (target.closest('.delete-btn')) {
-                const button = target.closest('.delete-btn');
-                const deleteIndex = button.dataset.index;
-                allData[monthKey].splice(deleteIndex, 1);
-                displayMonthData();
-            } else {
-                return; // Sai se não for uma ação relevante
-            }
-            saveData(); // Salva qualquer alteração feita na tabela
+                allData[monthKey].splice(target.closest('.delete-btn').dataset.index, 1);
+                displayMonthData(); // Re-renderiza para atualizar os índices
+            } else { return; }
+            atualizarTotais(allData[monthKey]);
+            updateFirestore();
         }
 
-        function handleMonthChange(direction) {
+        const adicionarGasto = () => {
+            const descricao = descricaoInput.value.trim();
+            const valor = parseFloat(valorInput.value);
+            if (descricao === '' || isNaN(valor) || valor <= 0) { alert('Preencha a descrição e um valor válido.'); return; }
+            const monthKey = getMonthKey(currentDate);
+            if (!allData[monthKey]) allData[monthKey] = [];
+            allData[monthKey].push({ descricao, valor, status: 'pendente' });
+            descricaoInput.value = ''; valorInput.value = ''; descricaoInput.focus();
+            displayMonthData();
+            updateFirestore();
+        };
+
+        const handleMonthChange = (direction) => {
             currentDate.setMonth(currentDate.getMonth() + direction);
             displayMonthData();
-        }
+        };
 
-        function handleCopyToNextMonth() {
+        const handleCopyToNextMonth = () => {
             const currentMonthKey = getMonthKey(currentDate);
             const gastosAtuais = allData[currentMonthKey];
-            if (!gastosAtuais || gastosAtuais.length === 0) {
-                alert('Não há gastos no mês atual para copiar.');
-                return;
-            }
+            if (!gastosAtuais || gastosAtuais.length === 0) { alert('Não há gastos para copiar.'); return; }
             const nextMonthDate = new Date(currentDate);
             nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
             const nextMonthKey = getMonthKey(nextMonthDate);
             const gastosCopiados = JSON.parse(JSON.stringify(gastosAtuais));
             gastosCopiados.forEach(gasto => gasto.status = 'pendente');
             allData[nextMonthKey] = gastosCopiados;
-            saveData();
+            updateFirestore();
             handleMonthChange(1);
-            alert('Gastos copiados para o próximo mês! Os status foram redefinidos para "Pendente".');
-        }
+            alert('Gastos copiados para o próximo mês!');
+        };
 
         // --- INICIALIZAÇÃO ---
-        window.onload = () => {
-            loadData();
-            displayMonthData();
-            descricaoInput.focus();
+        function initialize() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
 
-            // Listeners centralizados
-            tabelaGastos.addEventListener('change', handleTableActions);
-            tabelaGastos.addEventListener('click', handleTableActions);
-            addGastoBtn.addEventListener('click', adicionarGasto);
-            valorInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarGasto(); });
-            prevMonthBtn.addEventListener('click', () => handleMonthChange(-1));
-            nextMonthBtn.addEventListener('click', () => handleMonthChange(1));
-            copyMonthBtn.addEventListener('click', handleCopyToNextMonth);
-        };
+                onAuthStateChanged(auth, user => {
+                    if (user) {
+                        userId = user.uid;
+                        const userDocRef = doc(db, "users", userId);
+                        onSnapshot(userDocRef, (doc) => {
+                            allData = doc.exists() ? doc.data() : {};
+                            if (Object.keys(allData).length === 0) {
+                                // Adiciona dados de exemplo se o usuário for novo
+                                const key = getMonthKey(new Date());
+                                allData[key] = [
+                                    { descricao: 'Condomínio', valor: 550.00, status: 'pendente' },
+                                    { descricao: 'Internet', valor: 130.00, status: 'pago' }
+                                ];
+                                updateFirestore();
+                            }
+                            displayMonthData();
+                            loadingState.classList.add('hidden');
+                            appContent.classList.remove('hidden');
+                        });
+                    } else {
+                        signInAnonymously(auth);
+                    }
+                });
+
+                // Listeners
+                tabelaGastos.addEventListener('change', handleTableActions);
+                tabelaGastos.addEventListener('focusout', handleTableActions); // Para salvar ao sair do input de valor
+                tabelaGastos.addEventListener('click', handleTableActions);
+                addGastoBtn.addEventListener('click', adicionarGasto);
+                valorInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarGasto(); });
+                prevMonthBtn.addEventListener('click', () => handleMonthChange(-1));
+                nextMonthBtn.addEventListener('click', () => handleMonthChange(1));
+                copyMonthBtn.addEventListener('click', handleCopyToNextMonth);
+
+            } catch (error) {
+                console.error("Erro na inicialização do Firebase:", error);
+                loadingState.innerHTML = `<p class="text-red-500">Erro ao conectar. Verifique a configuração do Firebase no código.</p>`;
+            }
+        }
+
+        initialize();
     </script>
 </body>
 
