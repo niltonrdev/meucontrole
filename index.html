@@ -175,14 +175,19 @@
 
             if (target.classList.contains('status-select')) {
                 allData[monthKey][index].status = target.value;
-                renderizarTabela(allData[monthKey]);
+                // ATUALIZA APENAS A COR DA LINHA, SEM REDESENHAR A TABELA
+                const tr = target.closest('tr');
+                if (tr) {
+                    tr.className = `transition-colors duration-300 ${target.value === 'pago' ? 'status-pago' : 'status-pendente'}`;
+                }
+                atualizarTotais(allData[monthKey]); // Atualiza os totais
             } else if (target.classList.contains('valor-input')) {
                  const novoValor = parseFloat(target.value);
                  if (!isNaN(novoValor) && novoValor >= 0) allData[monthKey][index].valor = novoValor;
                  atualizarTotais(allData[monthKey]);
             } else if (target.closest('.delete-btn')) {
                 allData[monthKey].splice(target.closest('.delete-btn').dataset.index, 1);
-                displayMonthData();
+                displayMonthData(); // Precisa redesenhar aqui para reajustar os índices
             } else { return; }
             updateFirestore();
         }
@@ -220,7 +225,9 @@
         };
         
         const showUIForLoggedInUser = (user) => {
-            welcomeTitle.textContent = `Olá, ${user.displayName.split(' ')[0]}!`;
+            // Correção: Verifica se user.displayName existe antes de usar .split()
+            const nome = user.displayName ? user.displayName.split(' ')[0] : 'Usuário';
+            welcomeTitle.textContent = `Olá, ${nome}!`;
             loginBtn.classList.add('hidden');
             enterAppBtn.classList.remove('hidden');
             logoutBtn.classList.remove('hidden');
