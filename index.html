@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Gastos Mensais</title>
+    
+    <!-- PWA Manifest e Theme Color -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5"/>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -175,19 +180,18 @@
 
             if (target.classList.contains('status-select')) {
                 allData[monthKey][index].status = target.value;
-                // ATUALIZA APENAS A COR DA LINHA, SEM REDESENHAR A TABELA
                 const tr = target.closest('tr');
                 if (tr) {
                     tr.className = `transition-colors duration-300 ${target.value === 'pago' ? 'status-pago' : 'status-pendente'}`;
                 }
-                atualizarTotais(allData[monthKey]); // Atualiza os totais
+                atualizarTotais(allData[monthKey]);
             } else if (target.classList.contains('valor-input')) {
                  const novoValor = parseFloat(target.value);
                  if (!isNaN(novoValor) && novoValor >= 0) allData[monthKey][index].valor = novoValor;
                  atualizarTotais(allData[monthKey]);
             } else if (target.closest('.delete-btn')) {
                 allData[monthKey].splice(target.closest('.delete-btn').dataset.index, 1);
-                displayMonthData(); // Precisa redesenhar aqui para reajustar os índices
+                displayMonthData();
             } else { return; }
             updateFirestore();
         }
@@ -225,7 +229,6 @@
         };
         
         const showUIForLoggedInUser = (user) => {
-            // Correção: Verifica se user.displayName existe antes de usar .split()
             const nome = user.displayName ? user.displayName.split(' ')[0] : 'Usuário';
             welcomeTitle.textContent = `Olá, ${nome}!`;
             loginBtn.classList.add('hidden');
@@ -238,7 +241,7 @@
             loginBtn.classList.remove('hidden');
             enterAppBtn.classList.add('hidden');
             logoutBtn.classList.add('hidden');
-            appContent.classList.add('hidden'); // Esconde app se deslogar
+            appContent.classList.add('hidden');
             homePage.classList.remove('hidden');
             homePage.classList.add('flex');
         };
@@ -255,17 +258,26 @@
                     homePage.classList.remove('hidden');
                     homePage.classList.add('flex');
 
-                    if (unsubscribe) unsubscribe(); // Cancela o listener anterior ao trocar de usuário
+                    if (unsubscribe) unsubscribe();
 
-                    if (user) { // Usuário está logado
+                    if (user) {
                         userId = user.uid;
                         showUIForLoggedInUser(user);
                         const userDocRef = doc(db, "users", userId);
                         unsubscribe = onSnapshot(userDocRef, (doc) => {
-                            allData = doc.exists() ? doc.data() : {};
+                            // Lógica corrigida para evitar apagar dados existentes
+                            if (doc.exists()) {
+                                allData = doc.data();
+                            } else {
+                                // Apenas cria dados de exemplo se o documento REALMENTE não existe
+                                allData = {};
+                                const key = getMonthKey(new Date());
+                                allData[key] = [{ descricao: 'Exemplo: Internet', valor: 130.00, status: 'pago' }];
+                                updateFirestore(); // Salva o estado inicial para o novo usuário
+                            }
                             displayMonthData();
                         });
-                    } else { // Usuário não está logado
+                    } else {
                         userId = null;
                         allData = {};
                         showUIForLoggedOutUser();
@@ -285,6 +297,15 @@
                 prevMonthBtn.addEventListener('click', () => handleMonthChange(-1));
                 nextMonthBtn.addEventListener('click', () => handleMonthChange(1));
                 copyMonthBtn.addEventListener('click', handleCopyToNextMonth);
+
+                // Registro do Service Worker
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', () => {
+                        navigator.serviceWorker.register('/service-worker.js')
+                        .then(registration => console.log('Service Worker registrado:', registration))
+                        .catch(error => console.log('Falha no registro do Service Worker:', error));
+                    });
+                }
 
             } catch (error) {
                 console.error("Erro na inicialização do Firebase:", error);
