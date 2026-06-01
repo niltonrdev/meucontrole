@@ -63,7 +63,7 @@
     </div>
 
     <!-- Conteúdo Principal da Aplicação -->
-    <div id="appContent" class="max-w-4xl mx-auto hidden p-4 sm:p-6 lg:p-8">
+    <div id="appContent" class="max-w-5xl mx-auto hidden p-4 sm:p-6 lg:p-8">
         <!-- Cabeçalho -->
         <div class="text-center mb-6">
             <h1 class="text-3xl sm:text-4xl font-bold">Controle de Gastos Mensais</h1>
@@ -85,8 +85,8 @@
         </div>
 
         <!-- Card Principal -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card border dark:border-gray-700"><div class="p-6"><div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700"><div class="md:col-span-2"><label for="descricao" class="block text-sm font-medium">Descrição</label><input type="text" id="descricao" placeholder="Ex: Conta de Energia" class="mt-1 block w-full rounded-md h-10 px-3"></div><div><label for="valor" class="block text-sm font-medium">Valor (R$)</label><input type="number" id="valor" placeholder="150,00" class="mt-1 block w-full rounded-md h-10 px-3"></div><div class="flex items-end"><button id="addGasto" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md h-10">Adicionar</button></div></div><div class="overflow-x-auto"><table class="min-w-full"><thead class="bg-gray-50 dark:bg-gray-700"><tr><th class="table-cell text-left text-xs uppercase">Descrição</th><th class="table-cell text-left text-xs uppercase">Valor (R$)</th><th class="table-cell text-left text-xs uppercase">Status</th><th class="table-cell text-center text-xs uppercase">Ações</th></tr></thead><tbody id="tabelaGastos" class="divide-y divide-gray-200 dark:divide-gray-600"></tbody></table></div><p id="tabelaVazia" class="text-center text-gray-500 dark:text-gray-400 py-8">Nenhum gasto adicionado neste mês.</p></div></div>
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4"><div class="bg-yellow-100 dark:bg-yellow-900/50 p-5 rounded-lg shadow total-card"><h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-300">Total Pendente</h3><p id="totalPendente" class="mt-1 text-2xl font-semibold text-yellow-900 dark:text-yellow-200">R$ 0,00</p></div><div class="bg-green-100 dark:bg-green-900/50 p-5 rounded-lg shadow total-card"><h3 class="text-sm font-medium text-green-800 dark:text-green-300">Total Pago</h3><p id="totalPago" class="mt-1 text-2xl font-semibold text-green-900 dark:text-green-200">R$ 0,00</p></div><div class="bg-gray-100 dark:bg-gray-700 p-5 rounded-lg shadow total-card"><h3 class="text-sm font-medium text-gray-800 dark:text-gray-300">Total Geral</h3><p id="totalGeral" class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">R$ 0,00</p></div></div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card border dark:border-gray-700"><div class="p-6"><div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700"><div class="md:col-span-2"><label for="descricao" class="block text-sm font-medium">Descrição</label><input type="text" id="descricao" placeholder="Ex: Conta de Energia" class="mt-1 block w-full rounded-md h-10 px-3"></div><div><label for="valor" class="block text-sm font-medium">Valor (R$)</label><input type="number" id="valor" placeholder="150,00" class="mt-1 block w-full rounded-md h-10 px-3"></div><div class="flex items-end"><button id="addGasto" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md h-10">Adicionar</button></div></div><div class="overflow-x-auto"><table class="min-w-full"><thead class="bg-gray-50 dark:bg-gray-700"><tr><th class="table-cell text-left text-xs uppercase">Descrição</th><th class="table-cell text-left text-xs uppercase">Valor (R$)</th><th class="table-cell text-center text-xs uppercase">Dividido</th><th class="table-cell text-left text-xs uppercase">Status</th><th class="table-cell text-center text-xs uppercase">Ações</th></tr></thead><tbody id="tabelaGastos" class="divide-y divide-gray-200 dark:divide-gray-600"></tbody></table></div><p id="tabelaVazia" class="text-center text-gray-500 dark:text-gray-400 py-8">Nenhum gasto adicionado neste mês.</p></div></div>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4"><div class="bg-yellow-100 dark:bg-yellow-900/50 p-5 rounded-lg shadow total-card"><h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-300">Total Pendente <span class="font-normal text-xs">(sua parte)</span></h3><p id="totalPendente" class="mt-1 text-2xl font-semibold text-yellow-900 dark:text-yellow-200">R$ 0,00</p><p id="totalPendenteFatura" class="mt-1 text-xs text-yellow-700 dark:text-yellow-400">Faturas: R$ 0,00</p></div><div class="bg-green-100 dark:bg-green-900/50 p-5 rounded-lg shadow total-card"><h3 class="text-sm font-medium text-green-800 dark:text-green-300">Total Pago <span class="font-normal text-xs">(sua parte)</span></h3><p id="totalPago" class="mt-1 text-2xl font-semibold text-green-900 dark:text-green-200">R$ 0,00</p><p id="totalPagoFatura" class="mt-1 text-xs text-green-700 dark:text-green-400">Faturas: R$ 0,00</p></div><div class="bg-gray-100 dark:bg-gray-700 p-5 rounded-lg shadow total-card"><h3 class="text-sm font-medium text-gray-800 dark:text-gray-300">Total Geral <span class="font-normal text-xs">(sua parte)</span></h3><p id="totalGeral" class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">R$ 0,00</p><p id="totalGeralFatura" class="mt-1 text-xs text-gray-600 dark:text-gray-400">Faturas: R$ 0,00</p></div></div>
     </div>
 
     <script type="module">
@@ -116,8 +116,8 @@
         const appContent = document.getElementById('appContent');
         const saveChangesBtn = document.getElementById('saveChangesBtn');
         const saveStatusText = document.getElementById('saveStatusText');
-        const [descricaoInput, valorInput, addGastoBtn, tabelaGastos, tabelaVaziaMsg, totalPendenteEl, totalPagoEl, totalGeralEl, currentMonthDisplay, prevMonthBtn, nextMonthBtn, copyMonthBtn] = 
-            ['descricao', 'valor', 'addGasto', 'tabelaGastos', 'tabelaVazia', 'totalPendente', 'totalPago', 'totalGeral', 'currentMonthDisplay', 'prevMonthBtn', 'nextMonthBtn', 'copyMonthBtn'].map(id => document.getElementById(id));
+        const [descricaoInput, valorInput, addGastoBtn, tabelaGastos, tabelaVaziaMsg, totalPendenteEl, totalPagoEl, totalGeralEl, totalPendenteFaturaEl, totalPagoFaturaEl, totalGeralFaturaEl, currentMonthDisplay, prevMonthBtn, nextMonthBtn, copyMonthBtn] = 
+            ['descricao', 'valor', 'addGasto', 'tabelaGastos', 'tabelaVazia', 'totalPendente', 'totalPago', 'totalGeral', 'totalPendenteFatura', 'totalPagoFatura', 'totalGeralFatura', 'currentMonthDisplay', 'prevMonthBtn', 'nextMonthBtn', 'copyMonthBtn'].map(id => document.getElementById(id));
 
         // --- ESTADO DA APLICAÇÃO ---
         let allData = {};
@@ -135,6 +135,23 @@
             return formatted.charAt(0).toUpperCase() + formatted.slice(1);
         };
         const escapeHtmlAttr = (str) => String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+        const valorMinhaParte = (gasto) => gasto.dividido ? gasto.valor / 2 : gasto.valor;
+        const atualizarParteDividida = (tr, gasto) => {
+            if (!tr) return;
+            let parteEl = tr.querySelector('.dividido-parte');
+            if (gasto.dividido) {
+                const texto = `Sua parte: ${formatarMoeda(valorMinhaParte(gasto))}`;
+                if (parteEl) parteEl.textContent = texto;
+                else {
+                    parteEl = document.createElement('p');
+                    parteEl.className = 'dividido-parte text-xs text-indigo-600 dark:text-indigo-400 mt-0.5';
+                    parteEl.textContent = texto;
+                    tr.querySelector('.valor-cell')?.appendChild(parteEl);
+                }
+            } else if (parteEl) {
+                parteEl.remove();
+            }
+        };
 
         // --- LÓGICA DE SALVAMENTO ---
         function showSaveButton() {
@@ -185,11 +202,13 @@
             tabelaGastos.innerHTML = '';
             tabelaVaziaMsg.style.display = gastos.length === 0 ? 'block' : 'none';
             gastos.forEach((gasto, index) => {
+                if (gasto.dividido === undefined) gasto.dividido = false;
                 const tr = document.createElement('tr');
                 tr.className = `transition-colors duration-300 ${gasto.status === 'pago' ? 'status-pago' : 'status-pendente'}`;
                 tr.innerHTML = `
                     <td class="table-cell"><input type="text" class="descricao-input text-sm font-medium" value="${escapeHtmlAttr(gasto.descricao)}" data-index="${index}"></td>
-                    <td class="table-cell"><input type="number" class="valor-input" value="${gasto.valor.toFixed(2)}" data-index="${index}" step="0.01"></td>
+                    <td class="table-cell valor-cell"><input type="number" class="valor-input" value="${gasto.valor.toFixed(2)}" data-index="${index}" step="0.01" title="Valor total da fatura">${gasto.dividido ? `<p class="dividido-parte text-xs text-indigo-600 dark:text-indigo-400 mt-0.5">Sua parte: ${formatarMoeda(valorMinhaParte(gasto))}</p>` : ''}</td>
+                    <td class="table-cell text-center"><label class="inline-flex items-center justify-center cursor-pointer" title="Dividir com esposa (metade para você)"><input type="checkbox" class="dividido-checkbox h-5 w-5 rounded" data-index="${index}" ${gasto.dividido ? 'checked' : ''}><span class="sr-only">Dividido</span></label></td>
                     <td class="table-cell"><select class="status-select w-full h-10 rounded-md" data-index="${index}"><option value="pendente" ${gasto.status === 'pendente' ? 'selected' : ''}>Pendente</option><option value="pago" ${gasto.status === 'pago' ? 'selected' : ''}>Pago</option></select></td>
                     <td class="table-cell text-center"><button class="delete-btn text-red-500 hover:text-red-700" data-index="${index}"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" /></svg></button></td>
                 `;
@@ -199,12 +218,20 @@
         };
         
         const atualizarTotais = (gastos = []) => {
-            const totalPendente = gastos.filter(g => g.status === 'pendente').reduce((acc, g) => acc + g.valor, 0);
-            const totalPago = gastos.filter(g => g.status === 'pago').reduce((acc, g) => acc + g.valor, 0);
-            const totalGeral = gastos.reduce((acc, g) => acc + g.valor, 0);
+            const pendentes = gastos.filter(g => g.status === 'pendente');
+            const pagos = gastos.filter(g => g.status === 'pago');
+            const totalPendente = pendentes.reduce((acc, g) => acc + valorMinhaParte(g), 0);
+            const totalPago = pagos.reduce((acc, g) => acc + valorMinhaParte(g), 0);
+            const totalGeral = gastos.reduce((acc, g) => acc + valorMinhaParte(g), 0);
+            const faturaPendente = pendentes.reduce((acc, g) => acc + g.valor, 0);
+            const faturaPago = pagos.reduce((acc, g) => acc + g.valor, 0);
+            const faturaGeral = gastos.reduce((acc, g) => acc + g.valor, 0);
             totalPendenteEl.textContent = formatarMoeda(totalPendente);
             totalPagoEl.textContent = formatarMoeda(totalPago);
             totalGeralEl.textContent = formatarMoeda(totalGeral);
+            totalPendenteFaturaEl.textContent = `Faturas: ${formatarMoeda(faturaPendente)}`;
+            totalPagoFaturaEl.textContent = `Faturas: ${formatarMoeda(faturaPago)}`;
+            totalGeralFaturaEl.textContent = `Faturas: ${formatarMoeda(faturaGeral)}`;
         };
 
         const displayMonthData = () => {
@@ -228,7 +255,14 @@
                 atualizarTotais(allData[monthKey]);
             } else if (target.classList.contains('valor-input')) {
                 const novoValor = parseFloat(target.value);
-                if (!isNaN(novoValor) && novoValor >= 0) allData[monthKey][index].valor = novoValor;
+                if (!isNaN(novoValor) && novoValor >= 0) {
+                    allData[monthKey][index].valor = novoValor;
+                    atualizarParteDividida(target.closest('tr'), allData[monthKey][index]);
+                }
+                atualizarTotais(allData[monthKey]);
+            } else if (target.classList.contains('dividido-checkbox')) {
+                allData[monthKey][index].dividido = target.checked;
+                atualizarParteDividida(target.closest('tr'), allData[monthKey][index]);
                 atualizarTotais(allData[monthKey]);
             } else if (target.classList.contains('descricao-input')) {
                 const novaDescricao = target.value.trim();
@@ -250,7 +284,7 @@
             if (descricao === '' || isNaN(valor) || valor <= 0) { alert('Preencha a descrição e um valor válido.'); return; }
             const monthKey = getMonthKey(currentDate);
             if (!allData[monthKey]) allData[monthKey] = [];
-            allData[monthKey].push({ descricao, valor, status: 'pendente' });
+            allData[monthKey].push({ descricao, valor, status: 'pendente', dividido: false });
             descricaoInput.value = ''; valorInput.value = ''; descricaoInput.focus();
             displayMonthData();
             showSaveButton();
