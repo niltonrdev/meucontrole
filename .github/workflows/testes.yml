@@ -1,0 +1,26 @@
+name: testes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unitarios-e-regras:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Instalar dependências de teste
+        run: npm ci
+      - name: Testes de modelo e fuso
+        run: npm test
+      - name: Testes das regras (emulador Firestore)
+        run: npm run test:regras

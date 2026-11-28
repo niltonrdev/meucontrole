@@ -1,0 +1,6 @@
+{
+  "framework": null,
+  "installCommand": "echo \"site estático: sem npm install de produção\"",
+  "buildCommand": "echo \"site estático: sem build\"",
+  "outputDirectory": "."
+}
